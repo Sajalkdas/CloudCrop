@@ -1,14 +1,15 @@
 /**
- * CloudCorp - JavaScript
+ * CloudCrop - JavaScript
  * 
  * This script handles:
  * - Simulated sensor data generation 
  * - Real-time dashboard updates
  * - Status determination based on sensor thresholds
  * - Historical data visualization using Chart.js
+ * - Mobile navigation menu toggle
  * 
- * Name: Sajal Das
- * Date: 1/13/2026
+ * Author: Sajal Das
+ * Modified: 2/14/2026
  */
 
 // ===== SENSOR DATA GENERATION =====
@@ -44,68 +45,57 @@ function generateSensorData() {
  * @returns {Object} Object containing status text, CSS class name, and color code
  */
 function updateSensorStatus(value, type) {
-    // Default status
-    let status = '';
-    let statusClass = 'status-good';
-    let color = '#22c55e'; // Green for optimal
+    let status = '', statusClass = 'status-good', color = '#22c55e';
 
-    // Determine status based on sensor type and thresholds
     if (type === 'temperature') {
-        // Temperature thresholds in Fahrenheit
         if (value >= 59 && value <= 86) {
             status = 'Cool';
-            statusClass = 'status-good';
-            color = '#22c55e'; // Green for cool/optimal
         } else if (value > 86 && value <= 95) {
             status = 'Hot';
             statusClass = 'status-warning';
-            color = '#f59e0b'; // Orange for hot
+            color = '#f59e0b';
         } else if (value > 95) {
             status = 'Extreme Hot';
             statusClass = 'status-critical';
-            color = '#ef4444'; // Red for extreme hot
+            color = '#ef4444';
         } else if (value >= 50 && value < 59) {
             status = 'Cold';
             statusClass = 'status-warning';
-            color = '#3b82f6'; // Blue for cold
-        } else if (value < 50) {
+            color = '#3b82f6';
+        } else {
             status = 'Extreme Cold';
             statusClass = 'status-critical';
-            color = '#1e40af'; // Dark blue for extreme cold
+            color = '#1e40af';
         }
     } else if (type === 'moisture') {
-        // Moisture percentage thresholds
         if (value >= 30 && value <= 80) {
             status = 'Optimal';
-            statusClass = 'status-good';
-            color = '#3b82f6'; // Blue for optimal moisture
+            color = '#3b82f6';
         } else if (value > 80) {
             status = 'Wet';
             statusClass = 'status-warning';
-            color = '#0ea5e9'; // Light blue for wet
+            color = '#0ea5e9';
         } else if (value >= 20 && value < 30) {
             status = 'Dry';
             statusClass = 'status-warning';
-            color = '#f59e0b'; // Orange for dry
-        } else if (value < 20) {
+            color = '#f59e0b';
+        } else {
             status = 'Very Dry';
             statusClass = 'status-critical';
-            color = '#dc2626'; // Red for very dry
+            color = '#dc2626';
         }
     } else if (type === 'light') {
-        // Light intensity thresholds in lux
         if (value >= 300 && value <= 900) {
             status = 'Medium';
-            statusClass = 'status-good';
-            color = '#eab308'; // Yellow for medium/optimal light
+            color = '#eab308';
         } else if (value > 900) {
             status = 'High';
             statusClass = 'status-warning';
-            color = '#f59e0b'; // Orange for high light
-        } else if (value < 300) {
+            color = '#f59e0b';
+        } else {
             status = 'Low';
             statusClass = 'status-warning';
-            color = '#64748b'; // Gray for low light
+            color = '#64748b';
         }
     }
 
@@ -115,77 +105,49 @@ function updateSensorStatus(value, type) {
 // ===== DASHBOARD UPDATE FUNCTIONS =====
 
 /**
+ * Updates a single sensor card with current readings
+ * @param {string} id - The sensor id prefix ('temp', 'moisture', 'light')
+ * @param {number} value - The sensor value
+ * @param {string} type - The sensor type
+ */
+function updateSensorCard(id, value, type) {
+    const valueEl = document.getElementById(`${id}-value`);
+    const statusEl = document.getElementById(`${id}-status`);
+    const sensorStatus = updateSensorStatus(value, type);
+    
+    valueEl.textContent = value;
+    valueEl.style.color = sensorStatus.color;
+    statusEl.textContent = sensorStatus.status;
+    statusEl.className = `sensor-status ${sensorStatus.statusClass}`;
+}
+
+/**
  * Updates all sensor cards on the dashboard with current readings
  * This function is called on page load and then periodically (every 5 seconds)
  */
 function updateDashboard() {
-    // Get current sensor data (simulated or from API)
     const data = generateSensorData();
     
-    // === UPDATE TEMPERATURE CARD ===
-    // Update the displayed temperature value
-    const tempValueEl = document.getElementById('temp-value');
-    tempValueEl.textContent = data.temperature;
+    // Update all sensor cards
+    updateSensorCard('temp', data.temperature, 'temperature');
+    updateSensorCard('moisture', data.moisture, 'moisture');
+    updateSensorCard('light', data.light, 'light');
     
-    // Determine and update temperature status
-    const tempStatus = updateSensorStatus(data.temperature, 'temperature');
-    const tempStatusEl = document.getElementById('temp-status');
-    tempStatusEl.textContent = tempStatus.status;
-    tempStatusEl.className = `sensor-status ${tempStatus.statusClass}`;
-    
-    // Apply color to temperature value based on health status
-    tempValueEl.style.color = tempStatus.color;
-
-    // === UPDATE MOISTURE CARD ===
-    // Update the displayed moisture value
-    const moistureValueEl = document.getElementById('moisture-value');
-    moistureValueEl.textContent = data.moisture;
-    
-    // Determine and update moisture status
-    const moistureStatus = updateSensorStatus(data.moisture, 'moisture');
-    const moistureStatusEl = document.getElementById('moisture-status');
-    moistureStatusEl.textContent = moistureStatus.status;
-    moistureStatusEl.className = `sensor-status ${moistureStatus.statusClass}`;
-    
-    // Apply color to moisture value based on health status
-    moistureValueEl.style.color = moistureStatus.color;
-
-    // === UPDATE LIGHT CARD ===
-    // Update the displayed light value
-    const lightValueEl = document.getElementById('light-value');
-    lightValueEl.textContent = data.light;
-    
-    // Determine and update light status
-    const lightStatus = updateSensorStatus(data.light, 'light');
-    const lightStatusEl = document.getElementById('light-status');
-    lightStatusEl.textContent = lightStatus.status;
-    lightStatusEl.className = `sensor-status ${lightStatus.statusClass}`;
-    
-    // Apply color to light value based on health status
-    lightValueEl.style.color = lightStatus.color;
-
-    // === UPDATE TIMESTAMP ===
-    // Update the "Last updated" timestamp in the header
+    // Update timestamp
     document.getElementById('timestamp').textContent = new Date().toLocaleString();
 }
 
 // ===== HISTORICAL DATA GENERATION =====
 
 function generateHistoricalData() {
-    const labels = [];          // Time labels for x-axis
-    const tempData = [];        // Temperature data points
-    const moistureData = [];    // Moisture data points
-    const lightData = [];       // Light data points
+    const labels = [], tempData = [], moistureData = [], lightData = [];
 
     // Generate data for each hour in the past 24 hours
     for (let i = 23; i >= 0; i--) {
-        // Create label (e.g., "23h ago", "22h ago", etc.)
         labels.push(`${i}h ago`);
-        
-        // Generate random data points within wider ranges to show all statuses
-        tempData.push(40 + Math.random() * 60);      // 40-100°F
-        moistureData.push(10 + Math.random() * 80);  // 10-90%
-        lightData.push(100 + Math.random() * 1000);  // 100-1100 lux
+        tempData.push(40 + Math.random() * 60);
+        moistureData.push(10 + Math.random() * 80);
+        lightData.push(100 + Math.random() * 1000);
     }
 
     return { labels, tempData, moistureData, lightData };
@@ -197,69 +159,96 @@ function generateHistoricalData() {
  * Initialize and configure the Chart.js line chart
  * This runs once when the page loads
  */
-
-// Generate historical data
 const historicalData = generateHistoricalData();
-
-// Get the canvas context for Chart.js
 const ctx = document.getElementById('dataChart').getContext('2d');
 
-// Create the chart instance
 const chart = new Chart(ctx, {
-    type: 'line',  // Line chart type
+    type: 'line',
     data: {
-        labels: historicalData.labels,  // X-axis labels (time)
+        labels: historicalData.labels,
         datasets: [
             {
-                // Temperature dataset
                 label: 'Temperature (°F)',
                 data: historicalData.tempData,
-                borderColor: '#ff6b6b',              // Red line
-                backgroundColor: 'rgba(255, 107, 107, 0.1)',  // Light red fill
-                tension: 0.4  // Smooth curve
+                borderColor: '#ff6b6b',
+                backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                tension: 0.4
             },
             {
-                // Moisture dataset
                 label: 'Moisture (%)',
                 data: historicalData.moistureData,
-                borderColor: '#4ecdc4',              // Teal line
-                backgroundColor: 'rgba(78, 205, 196, 0.1)',   // Light teal fill
-                tension: 0.4  // Smooth curve
+                borderColor: '#4ecdc4',
+                backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                tension: 0.4
             },
             {
-                // Light dataset (divided by 10 for better scale visualization)
                 label: 'Light (lux/10)',
                 data: historicalData.lightData.map(v => v / 10),
-                borderColor: '#ffd93d',              // Yellow line
-                backgroundColor: 'rgba(255, 217, 61, 0.1)',   // Light yellow fill
-                tension: 0.4  // Smooth curve
+                borderColor: '#ffd93d',
+                backgroundColor: 'rgba(255, 217, 61, 0.1)',
+                tension: 0.4
             }
         ]
     },
     options: {
-        responsive: true,              // Chart resizes with container
-        maintainAspectRatio: false,    // Allows custom height
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
-                display: true,          // Show legend
-                position: 'top'         // Legend at top of chart
+                display: true,
+                position: 'top'
             }
         },
         scales: {
             y: {
-                beginAtZero: true       // Y-axis starts at zero
+                beginAtZero: true
             }
         }
+    }
+});
+
+// ===== MOBILE MENU TOGGLE =====
+
+/**
+ * Handle mobile navigation menu toggle
+ * Activates when DOM is fully loaded
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+
+    if (mobileMenuToggle) {
+        // Toggle menu visibility when hamburger icon is clicked
+        mobileMenuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            this.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a nav link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideNav = navMenu.contains(event.target);
+            const isClickOnToggle = mobileMenuToggle.contains(event.target);
+            
+            if (!isClickInsideNav && !isClickOnToggle && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+            }
+        });
     }
 });
 
 // ===== INITIALIZATION AND UPDATE LOOP =====
 
 /**
- * Initial dashboard update on page load
+ * Initial dashboard update on page load and automatic updates every 5 seconds
  */
 updateDashboard();
-
-/** Automatic updates every 5 seconds */
-
 setInterval(updateDashboard, 5000);

@@ -1,5 +1,5 @@
 /**
- * CloudCorp Styles
+ * CloudCrop Styles
  * 
  * This stylesheet provides responsive design for the environmental 
  * data dashboard with mobile compatibility and modern visual effects.
@@ -19,13 +19,91 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #2d5016 0%, #3a7d44 50%, #6bb77b 100%);
     min-height: 100vh;
-    padding: 20px;
 }
 
 /* Main container with max-width for large screens */
 .container {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 20px;
+}
+
+/* ===== NAVIGATION BAR STYLES ===== */
+
+/* Navigation bar with transparent dark overlay */
+.navbar {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.brand-icon {
+    font-size: 2rem;
+}
+
+.brand-name {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 1rem;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s, transform 0.2s;
+    display: block;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.mobile-menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s;
 }
 
 /* ===== HEADER STYLES ===== */
@@ -35,6 +113,7 @@ header {
     text-align: center;
     color: white;
     margin-bottom: 30px;
+    padding-top: 20px;
 }
 
 /* Main title styling with shadow effect */
@@ -68,7 +147,7 @@ header h1 {
     border-radius: 15px;
     padding: 25px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 /* Hover effect for sensor cards - lifts up with stronger shadow */
@@ -102,7 +181,6 @@ header h1 {
     font-size: 3rem;
     font-weight: bold;
     margin-bottom: 10px;
-    transition: color 0.3s ease;
 }
 
 /* Unit text styling (°F, %, lux) */
@@ -169,24 +247,171 @@ canvas {
 /* ===== COLOR CLASSES FOR SENSOR VALUES ===== */
 
 /* Temperature value color (red) */
-.temp {
-    color: #ff6b6b;
-}
+.temp { color: #ff6b6b; }
 
 /* Moisture value color (teal) */
-.moisture {
-    color: #4ecdc4;
-}
+.moisture { color: #4ecdc4; }
 
 /* Light value color (yellow) */
-.light {
-    color: #ffd93d;
+.light { color: #ffd93d; }
+
+/* ===== FOOTER STYLES ===== */
+
+/* Footer with dark overlay matching navbar */
+.footer {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    color: white;
+    margin-top: 4rem;
+    padding: 3rem 2rem 1rem;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-heading {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #6bb77b;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.footer-description {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-link {
+    font-size: 1.5rem;
+    transition: transform 0.3s;
+}
+
+.social-link:hover {
+    transform: scale(1.2);
+}
+
+/* Social media icons - white by default, brand colors on hover */
+.social-link i {
+    color: white;
+    transition: color 0.3s;
+}
+
+.social-link:hover .fa-facebook {
+    color: #1877f2;
+}
+
+.social-link:hover .fa-instagram {
+    color: #e4405f;
+}
+
+.social-link:hover .fa-youtube {
+    color: #ff0000;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #6bb77b;
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.footer-bottom p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-bottom-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.footer-bottom-links a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-bottom-links a:hover {
+    color: #6bb77b;
+    text-decoration: underline;
 }
 
 /* ===== RESPONSIVE STYLES ===== */
 
 /* Tablet and smaller desktop screens */
 @media (max-width: 768px) {
+    /* Navigation responsive styles */
+    .nav-container {
+        padding: 1rem;
+    }
+
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.95);
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .nav-menu.active {
+        display: flex;
+    }
+
+    .nav-item,
+    .nav-link {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-link {
+        padding: 1rem;
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+    }
+
     /* Reduce header title size */
     header h1 {
         font-size: 1.8rem;
@@ -206,13 +431,51 @@ canvas {
     canvas {
         height: 250px !important;
     }
+
+    /* Footer responsive styles */
+    .footer {
+        padding: 2rem 1rem 1rem;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-section,
+    .footer-links {
+        text-align: center;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
 }
 
 /* Mobile phone screens */
 @media (max-width: 480px) {
-    /* Reduce body padding on mobile */
-    body {
-        padding: 10px;
+    /* Navigation mobile styles */
+    .nav-container {
+        flex-direction: column;
+        position: relative;
+    }
+
+    .nav-brand {
+        font-size: 1.2rem;
+    }
+
+    .brand-icon {
+        font-size: 1.5rem;
+    }
+
+    .mobile-menu-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .nav-menu {
+        margin-top: 1rem;
     }
 
     /* Further reduce header title size */
@@ -228,5 +491,16 @@ canvas {
     /* Further reduce sensor value size */
     .sensor-value {
         font-size: 2rem;
+    }
+
+    /* Container mobile padding */
+    .container {
+        padding: 10px;
+    }
+
+    /* Footer mobile adjustments */
+    .footer-bottom-links {
+        flex-direction: column;
+        gap: 1rem;
     }
 }

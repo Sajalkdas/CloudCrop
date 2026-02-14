@@ -6,18 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CloudCrop</title>
     <link rel="stylesheet" href="style.css">
-    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js library for data visualization -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🌱</span>
+                <span class="brand-name">CloudCrop</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#dashboard" class="nav-link active">Dashboard</a></li>
+                <li class="nav-item"><a href="#analytics" class="nav-link">Analytics</a></li>
+                <li class="nav-item"><a href="#settings" class="nav-link">Settings</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
     <!-- Main container for the dashboard -->
     <div class="container">
         <header>
-            <h1>CloudCrop 🌱</h1>
+            <h1>CloudCrop🌱</h1>
             <p class="last-update">Last updated: <span id="timestamp"></span></p>
         </header>
-
         <!-- Dashboard grid containing all sensor cards -->
         <div class="dashboard">
             
@@ -35,7 +55,6 @@
                 <!-- Temperature status indicator -->
                 <span id="temp-status" class="sensor-status">Loading...</span>
             </div>
-
             <!-- Soil Moisture Sensor Card -->
             <div class="sensor-card">
                 <div class="sensor-header">
@@ -50,7 +69,6 @@
                 <!-- Moisture status indicator -->
                 <span id="moisture-status" class="sensor-status">Loading...</span>
             </div>
-
             <!-- Sunlight Sensor Card -->
             <div class="sensor-card">
                 <div class="sensor-header">
@@ -66,7 +84,6 @@
                 <span id="light-status" class="sensor-status">Loading...</span>
             </div>
         </div>
-
         <!-- Chart container for historical data visualization -->
         <div class="chart-container">
             <div class="chart-title">📊 Historical Data (Last 24 Hours)</div>
@@ -74,6 +91,52 @@
             <canvas id="dataChart"></canvas>
         </div>
     </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3 class="footer-heading">CloudCrop</h3>
+                <p class="footer-description">Automated Watering System</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link" aria-label="Youtube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-heading">Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#analytics">Analytics</a></li>
+                    <li><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="#support">Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-heading">Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="#api">API</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#community">Community</a></li>
+                    <li><a href="#documentation">Documentation</a></li>  
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-heading">Contact</h4>
+                <ul class="footer-links">
+                    <li> info@cloudcrop.com</li>
+                    <li>(203) 550-9000</li>
+                    <li>Bridgeport, CT</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-bottom-links">
+                <a href="#terms&privacy">Terms & Privacy Policy</a>
+            </div>
+            <p>&copy; 2026 CloudCrop. All rights reserved.</p>
+        </div>
+    </footer>
 
     <!-- Link to JavaScript file -->
     <script src="script.js"></script>
