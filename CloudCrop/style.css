@@ -1,0 +1,232 @@
+/**
+ * CloudCorp Styles
+ * 
+ * This stylesheet provides responsive design for the environmental 
+ * data dashboard with mobile compatibility and modern visual effects.
+ */
+
+/* ===== BASE STYLES ===== */
+
+/* Reset default margins and paddings, use border-box sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling with green gradient background */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #2d5016 0%, #3a7d44 50%, #6bb77b 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Main container with max-width for large screens */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ===== HEADER STYLES ===== */
+
+/* Header section styling */
+header {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+}
+
+/* Main title styling with shadow effect */
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Last update timestamp styling */
+.last-update {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* ===== DASHBOARD GRID STYLES ===== */
+
+/* Grid layout for sensor cards - responsive with auto-fit */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* ===== SENSOR CARD STYLES ===== */
+
+/* Individual sensor card styling */
+.sensor-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for sensor cards - lifts up with stronger shadow */
+.sensor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Header section of each sensor card */
+.sensor-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Icon styling for each sensor type */
+.sensor-icon {
+    font-size: 2.5rem;
+    margin-right: 15px;
+}
+
+/* Title text for each sensor */
+.sensor-title {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 600;
+}
+
+/* Main value display for sensor readings */
+.sensor-value {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+/* Unit text styling (°F, %, lux) */
+.sensor-unit {
+    font-size: 1.2rem;
+    color: #999;
+    margin-left: 5px;
+}
+
+/* ===== STATUS INDICATOR STYLES ===== */
+
+/* Base status badge styling */
+.sensor-status {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Status color for normal readings */
+.status-good {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* Status color for warning readings */
+.status-warning {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* Status color for critical readings */
+.status-critical {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ===== CHART CONTAINER STYLES ===== */
+
+/* Container for the historical data chart */
+.chart-container {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+/* Chart title styling */
+.chart-title {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Canvas sizing for Chart.js */
+canvas {
+    width: 100% !important;
+    height: 300px !important;
+}
+
+/* ===== COLOR CLASSES FOR SENSOR VALUES ===== */
+
+/* Temperature value color (red) */
+.temp {
+    color: #ff6b6b;
+}
+
+/* Moisture value color (teal) */
+.moisture {
+    color: #4ecdc4;
+}
+
+/* Light value color (yellow) */
+.light {
+    color: #ffd93d;
+}
+
+/* ===== RESPONSIVE STYLES ===== */
+
+/* Tablet and smaller desktop screens */
+@media (max-width: 768px) {
+    /* Reduce header title size */
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    /* Stack sensor cards vertically on smaller screens */
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    /* Reduce sensor value size */
+    .sensor-value {
+        font-size: 2.5rem;
+    }
+
+    /* Reduce chart height on tablets */
+    canvas {
+        height: 250px !important;
+    }
+}
+
+/* Mobile phone screens */
+@media (max-width: 480px) {
+    /* Reduce body padding on mobile */
+    body {
+        padding: 10px;
+    }
+
+    /* Further reduce header title size */
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    /* Reduce card padding on mobile */
+    .sensor-card {
+        padding: 20px;
+    }
+
+    /* Further reduce sensor value size */
+    .sensor-value {
+        font-size: 2rem;
+    }
+}

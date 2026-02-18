@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags for character encoding and responsive design -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudCrop</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Chart.js library for data visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <!-- Main container for the dashboard -->
+    <div class="container">
+        <header>
+            <h1>CloudCrop 🌱</h1>
+            <p class="last-update">Last updated: <span id="timestamp"></span></p>
+        </header>
+
+        <!-- Dashboard grid containing all sensor cards -->
+        <div class="dashboard">
+            
+            <!-- Temperature Sensor Card -->
+            <div class="sensor-card">
+                <div class="sensor-header">
+                    <div class="sensor-icon">🌡️</div>
+                    <div class="sensor-title">Temperature</div>
+                </div>
+                <!-- Temperature value display -->
+                <div class="sensor-value temp">
+                    <span id="temp-value">--</span>
+                    <span class="sensor-unit">°F</span>
+                </div>
+                <!-- Temperature status indicator -->
+                <span id="temp-status" class="sensor-status">Loading...</span>
+            </div>
+
+            <!-- Soil Moisture Sensor Card -->
+            <div class="sensor-card">
+                <div class="sensor-header">
+                    <div class="sensor-icon">💧</div>
+                    <div class="sensor-title">Soil Moisture</div>
+                </div>
+                <!-- Moisture value display -->
+                <div class="sensor-value moisture">
+                    <span id="moisture-value">--</span>
+                    <span class="sensor-unit">%</span>
+                </div>
+                <!-- Moisture status indicator -->
+                <span id="moisture-status" class="sensor-status">Loading...</span>
+            </div>
+
+            <!-- Sunlight Sensor Card -->
+            <div class="sensor-card">
+                <div class="sensor-header">
+                    <div class="sensor-icon">☀️</div>
+                    <div class="sensor-title">Sunlight</div>
+                </div>
+                <!-- Light value display -->
+                <div class="sensor-value light">
+                    <span id="light-value">--</span>
+                    <span class="sensor-unit">lux</span>
+                </div>
+                <!-- Light status indicator -->
+                <span id="light-status" class="sensor-status">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Chart container for historical data visualization -->
+        <div class="chart-container">
+            <div class="chart-title">📊 Historical Data (Last 24 Hours)</div>
+            <!-- Canvas element where Chart.js will render the graph -->
+            <canvas id="dataChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Link to JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
