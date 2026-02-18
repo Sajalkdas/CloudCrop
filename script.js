@@ -1,31 +1,25 @@
 /**
  * CloudCrop - JavaScript
  * 
- * This script handles:
- * - Simulated sensor data generation 
- * - Real-time dashboard updates
- * - Status determination based on sensor thresholds
- * - Historical data visualization using Chart.js
- * - Mobile navigation menu toggle
+ * This script handles simulated sensor data generation, real-time dashboard updates,
+ * status based on sensor thresholds, historical data visualization using Chart.js,
+ *  and mobile navigation menu toggle
  * 
  * Author: Sajal Das
- * Modified: 2/14/2026
+ * Modified: 2/18/2026
  */
 
 // ===== SENSOR DATA GENERATION =====
 
 function generateSensorData() {
     return {
-        // Generate temperature between 40°F and 100°F (wider range to show all statuses)
-        // Critical: <50 or >95, Warning: 50-59 or 86-95, Healthy: 59-86
+        // Generate temperature between 40°F and 100°F (Critical: <50 or >95, Warning: 50-59 or 86-95, Healthy: 59-86)
         temperature: (40 + Math.random() * 60).toFixed(1),
         
-        // Generate moisture between 10% and 90% (wider range to show all statuses)
-        // Critical: <20, Warning: <30 or >80, Healthy: 30-80
+        // Generate moisture between 10% and 90% (Critical: <20, Warning: <30 or >80, Healthy: 30-80)
         moisture: (10 + Math.random() * 80).toFixed(1),
         
-        // Generate light between 100 and 1100 lux (wider range to show all statuses)
-        // Warning: <300 or >900, Healthy: 300-900
+        // Generate light between 100 and 1100 lux (Warning: <300 or >900, Healthy: 300-900)
         light: Math.floor(100 + Math.random() * 1000)
     };
 }
@@ -34,8 +28,6 @@ function generateSensorData() {
 
 /**
  * Determines the status of a sensor reading based on predefined thresholds
- * 
- * Thresholds:
  * - Temperature: Cool (59-86°F), Hot (86-95°F), Extreme Hot (>95°F), Cold (50-59°F), Extreme Cold (<50°F)
  * - Moisture: Optimal (30-80%), Wet (>80%), Dry (<30%), Very Dry (<20%)
  * - Light: Medium (300-900 lux), High (>900 lux), Low (<300 lux)
@@ -211,7 +203,6 @@ const chart = new Chart(ctx, {
 
 /**
  * Handle mobile navigation menu toggle
- * Activates when DOM is fully loaded
  */
 document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
@@ -246,7 +237,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ===== INITIALIZATION AND UPDATE LOOP =====
-
 /**
  * Initial dashboard update on page load and automatic updates every 5 seconds
  */
