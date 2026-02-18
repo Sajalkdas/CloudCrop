@@ -11,6 +11,7 @@
 
 // ===== SENSOR DATA GENERATION =====
 
+
 function generateSensorData() {
     return {
         // Generate temperature between 40°F and 100°F (Critical: <50 or >95, Warning: 50-59 or 86-95, Healthy: 59-86)
