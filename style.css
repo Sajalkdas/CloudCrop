@@ -143,10 +143,11 @@ header h1 {
 /* Individual sensor card styling */
 .sensor-card {
     background: white;
-    border-radius: 15px;
+    border-radius: 25px;
     padding: 25px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
 }
 
 /* Hover effect for sensor cards - lifts up with stronger shadow */
@@ -160,6 +161,7 @@ header h1 {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    justify-content: center;
 }
 
 /* Icon styling for each sensor type */
@@ -216,6 +218,61 @@ header h1 {
 .status-critical {
     background: #f8d7da;
     color: #721c24;
+}
+/* ===== WEATHER SECTION ===== */
+.weather-container {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+}
+
+.weather-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.weather-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s;
+}
+
+.weather-card:hover {
+    transform: translateY(-3px);
+}
+
+.weather-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.weather-label {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.weather-value {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #3a7d44;
+    text-transform: capitalize;
+}
+
+.weather-error {
+    color: #dc2626;
+    background: #fef2f2;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
 }
 
 /* ===== CHART CONTAINER STYLES ===== */

@@ -130,6 +130,33 @@ function updateDashboard() {
     document.getElementById('timestamp').textContent = new Date().toLocaleString();
 }
 
+// ===== WEATHER API =====
+
+const WEATHER_API_KEY = '143a23e749199fbc8a824789dad93646'; // Replace with your key
+const WEATHER_CITY = 'Bridgeport,US';
+
+async function fetchWeather() {
+    try {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${WEATHER_CITY}&appid=${WEATHER_API_KEY}&units=imperial`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Weather fetch failed');
+        const data = await response.json();
+
+        document.getElementById('weather-temp').textContent = data.main.temp.toFixed(1);
+        document.getElementById('weather-humidity').textContent = data.main.humidity;
+        document.getElementById('weather-wind').textContent = data.wind.speed.toFixed(1);
+        document.getElementById('weather-desc').textContent = data.weather[0].description;
+        document.getElementById('weather-error').style.display = 'none';
+    } catch (err) {
+        document.getElementById('weather-error').style.display = 'block';
+        console.error('Weather API error:', err);
+    }
+}
+
+// Call on load and refresh every 1 minute
+fetchWeather();
+setInterval(fetchWeather, 1 * 60 * 1000);
+
 // ===== HISTORICAL DATA GENERATION =====
 
 function generateHistoricalData() {

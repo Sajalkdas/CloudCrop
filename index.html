@@ -21,7 +21,7 @@
             </div>
             <ul class="nav-menu">
                 <li class="nav-item"><a href="#dashboard" class="nav-link active">Dashboard</a></li>
-                <li class="nav-item"><a href="#analytics" class="nav-link">Analytics</a></li>
+                <li class="nav-item"><a href="CloudCrop End of Semester Report.pdf" class="nav-link">Documentation</a></li>
                 <li class="nav-item"><a href="#settings" class="nav-link">Settings</a></li>
             </ul>
             <button class="mobile-menu-toggle" aria-label="Toggle menu">
@@ -84,6 +84,33 @@
                 <span id="light-status" class="sensor-status">Loading...</span>
             </div>
         </div>
+        <!-- Weather Data Section -->
+        <div class="weather-container">
+            <div class="chart-title">🌤️ Current Weather</div>
+            <div id="weather-error" class="weather-error" style="display:none;">Unable to load weather data.</div>
+            <div class="weather-grid">
+                <div class="weather-card">
+                    <div class="weather-icon">🌡️</div>
+                    <div class="weather-label">Outside Temp</div>
+                    <div class="weather-value"><span id="weather-temp">--</span> °F</div>
+                </div>
+                <div class="weather-card">
+                    <div class="weather-icon">💧</div>
+                    <div class="weather-label">Humidity</div>
+                    <div class="weather-value"><span id="weather-humidity">--</span> %</div>
+                </div>
+                <div class="weather-card">
+                    <div class="weather-icon">💨</div>
+                    <div class="weather-label">Wind Speed</div>
+                    <div class="weather-value"><span id="weather-wind">--</span> mph</div>
+                </div>
+                <div class="weather-card">
+                    <div class="weather-icon">☁️</div>
+                    <div class="weather-label">Conditions</div>
+                    <div class="weather-value" id="weather-desc">--</div>
+                </div>
+            </div>
+        </div>
         <!-- Chart container for historical data visualization -->
         <div class="chart-container">
             <div class="chart-title">📊 Historical Data (Last 24 Hours)</div>
@@ -115,10 +142,10 @@
             <div class="footer-section">
                 <h4 class="footer-heading">Resources</h4>
                 <ul class="footer-links">
-                    <li><a href="#api">API</a></li>
+                    <li><a href="https://home.openweathermap.org/api_keys">API</a></li>
                     <li><a href="#blog">Blog</a></li>
                     <li><a href="#community">Community</a></li>
-                    <li><a href="#documentation">Documentation</a></li>  
+                    <li><a href="CloudCrop End of Semester Report.pdf">Documentation</a></li>  
                 </ul>
             </div>
             <div class="footer-section">
