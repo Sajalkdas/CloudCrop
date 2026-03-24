@@ -1,35 +1,47 @@
 /**
  * CloudCrop Styles
- * 
- * This stylesheet provides responsive design for the environmental 
- * data dashboard with mobile compatibility and modern visual effects.
+ *
+ * Responsive dashboard stylesheet for the CloudCrop environmental sensor
+ * monitoring system.
+ *
+ * Sensors displayed:
+ *   Temperature   : 0–125 °F
+ *   Soil Moisture : 0–100 % (converted from raw 0–950 sensor units)
+ *   Sunlight      : 0–1200 lux
+ *
+ * Status badge classes:
+ *   .status-good     – Healthy / Optimal  (green)
+ *   .status-warning  – Caution            (amber / blue)
+ *   .status-critical – Extreme            (red / dark blue)
+ *
+ * Author: Sajal Das
+ * Modified: 3/10/2026
  */
 
-/* ===== BASE STYLES ===== */
-/* Reset default margins and paddings, use border-box sizing */
+
+/* ===== RESET & BASE ===== */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Body styling with green gradient background */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #2d5016 0%, #3a7d44 50%, #6bb77b 100%);
     min-height: 100vh;
 }
 
-/* Main container with max-width for large screens */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-/* ===== NAVIGATION BAR STYLES ===== */
 
-/* Navigation bar with transparent dark overlay */
+/* ===== NAVIGATION ===== */
+
 .navbar {
     background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
@@ -57,13 +69,8 @@ body {
     color: white;
 }
 
-.brand-icon {
-    font-size: 2rem;
-}
-
-.brand-name {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
+.brand-icon { font-size: 2rem; }
+.brand-name { text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
 
 .nav-menu {
     display: flex;
@@ -87,6 +94,7 @@ body {
     transform: translateY(-2px);
 }
 
+/* Hamburger button — hidden on desktop */
 .mobile-menu-toggle {
     display: none;
     flex-direction: column;
@@ -105,9 +113,9 @@ body {
     transition: all 0.3s;
 }
 
-/* ===== HEADER STYLES ===== */
 
-/* Header section styling */
+/* ===== PAGE HEADER ===== */
+
 header {
     text-align: center;
     color: white;
@@ -115,22 +123,21 @@ header {
     padding-top: 20px;
 }
 
-/* Main title styling with shadow effect */
 header h1 {
     font-size: 2.5rem;
     margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Last update timestamp styling */
 .last-update {
     font-size: 0.9rem;
     opacity: 0.9;
 }
 
-/* ===== DASHBOARD GRID STYLES ===== */
 
-/* Grid layout for sensor cards - responsive with auto-fit */
+/* ===== SENSOR DASHBOARD GRID ===== */
+
+/* Three equal columns; collapses to one on small screens */
 .dashboard {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -138,62 +145,55 @@ header h1 {
     margin-bottom: 30px;
 }
 
-/* ===== SENSOR CARD STYLES ===== */
 
-/* Individual sensor card styling */
+/* ===== SENSOR CARDS ===== */
+
 .sensor-card {
     background: white;
     border-radius: 25px;
     padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     transition: transform 0.3s, box-shadow 0.3s;
     text-align: center;
 }
 
-/* Hover effect for sensor cards - lifts up with stronger shadow */
 .sensor-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
 }
 
-/* Header section of each sensor card */
 .sensor-header {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
     justify-content: center;
+    margin-bottom: 20px;
 }
 
-/* Icon styling for each sensor type */
-.sensor-icon {
-    font-size: 2.5rem;
-    margin-right: 15px;
-}
+.sensor-icon  { font-size: 2.5rem; margin-right: 15px; }
+.sensor-title { font-size: 1.1rem; color: #666; font-weight: 600; }
 
-/* Title text for each sensor */
-.sensor-title {
-    font-size: 1.1rem;
-    color: #666;
-    font-weight: 600;
-}
-
-/* Main value display for sensor readings */
+/* Numeric readout — color driven by JS status */
 .sensor-value {
     font-size: 3rem;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-/* Unit text styling (°F, %, lux) */
+/* Unit label: °F | % | lux */
 .sensor-unit {
     font-size: 1.2rem;
     color: #999;
     margin-left: 5px;
 }
 
-/* ===== STATUS INDICATOR STYLES ===== */
 
-/* Base status badge styling */
+/* ===== STATUS BADGES ===== */
+
+/*
+ * Temperature  : Extreme Cold | Cold | Cool | Hot | Extreme Hot
+ * Soil Moisture: Dry Soil | Humid Soil | In Water
+ * Sunlight     : Extreme Low | Low | Medium | High | Extreme High
+ */
 .sensor-status {
     display: inline-block;
     padding: 5px 15px;
@@ -202,36 +202,26 @@ header h1 {
     font-weight: 600;
 }
 
-/* Status color for normal readings */
-.status-good {
-    background: #d4edda;
-    color: #155724;
-}
+.status-good     { background: #d4edda; color: #155724; } /* Healthy  */
+.status-warning  { background: #fff3cd; color: #856404; } /* Caution  */
+.status-critical { background: #f8d7da; color: #721c24; } /* Extreme  */
 
-/* Status color for warning readings */
-.status-warning {
-    background: #fff3cd;
-    color: #856404;
-}
 
-/* Status color for critical readings */
-.status-critical {
-    background: #f8d7da;
-    color: #721c24;
-}
 /* ===== WEATHER SECTION ===== */
+
 .weather-container {
     background: white;
     border-radius: 15px;
     padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     margin-bottom: 30px;
 }
 
-.weather-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+/* Three equal cards in a flex row */
+.weather-current {
+    display: flex;
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .weather-card {
@@ -243,29 +233,24 @@ header h1 {
     transition: transform 0.2s;
 }
 
-.weather-card:hover {
-    transform: translateY(-3px);
+.weather-card:hover { transform: translateY(-3px); }
+
+/* Each of the three cards takes equal space */
+.weather-card--current {
+    flex: 1;
+    min-width: 140px;
 }
 
-.weather-icon {
-    font-size: 2rem;
-    margin-bottom: 8px;
-}
+.weather-icon  { font-size: 2rem; margin-bottom: 8px; }
+.weather-label { font-size: 0.85rem; color: #666; font-weight: 600; margin-bottom: 6px; }
+.weather-value { font-size: 1.3rem; font-weight: bold; color: #3a7d44; text-transform: capitalize; }
 
-.weather-label {
-    font-size: 0.85rem;
-    color: #666;
-    font-weight: 600;
-    margin-bottom: 6px;
-}
+/* 2-hour forecast card internals */
+.forecast-icon { font-size: 2rem; margin: 8px 0; }
+.forecast-temp { font-size: 1.3rem; font-weight: bold; color: #3a7d44; margin-bottom: 4px; }
+.forecast-desc { font-size: 0.85rem; color: #666; text-transform: capitalize; line-height: 1.4; }
 
-.weather-value {
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: #3a7d44;
-    text-transform: capitalize;
-}
-
+/* Error banner */
 .weather-error {
     color: #dc2626;
     background: #fef2f2;
@@ -275,18 +260,23 @@ header h1 {
     font-size: 0.9rem;
 }
 
-/* ===== CHART CONTAINER STYLES ===== */
 
-/* Container for the historical data chart */
+/* ===== HISTORICAL CHART ===== */
+
+/*
+ * Chart datasets:
+ *   Temperature (°F)   — plotted as-is
+ *   Soil Moisture (%)  — raw /950 *100, plotted 0–100
+ *   Sunlight (lux ÷ 10)— divided by 10 to share the y-axis
+ */
 .chart-container {
     background: white;
     border-radius: 15px;
     padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     margin-bottom: 20px;
 }
 
-/* Chart title styling */
 .chart-title {
     font-size: 1.3rem;
     margin-bottom: 20px;
@@ -294,33 +284,28 @@ header h1 {
     font-weight: 600;
 }
 
-/* Canvas sizing for Chart.js */
 canvas {
     width: 100% !important;
     height: 300px !important;
 }
 
-/* ===== COLOR CLASSES FOR SENSOR VALUES ===== */
 
-/* Temperature value color (red) */
-.temp { color: #ff6b6b; }
+/* ===== SENSOR VALUE ACCENT COLORS ===== */
 
-/* Moisture value color (teal) */
-.moisture { color: #4ecdc4; }
+.temp     { color: #ff6b6b; }  /* Temperature    — coral red  */
+.moisture { color: #4ecdc4; }  /* Soil Moisture  — teal       */
+.light    { color: #ffd93d; }  /* Sunlight       — yellow     */
 
-/* Light value color (yellow) */
-.light { color: #ffd93d; }
 
-/* ===== FOOTER STYLES ===== */
+/* ===== FOOTER ===== */
 
-/* Footer with dark overlay matching navbar */
 .footer {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0,0,0,0.4);
     backdrop-filter: blur(10px);
     color: white;
     margin-top: 4rem;
     padding: 3rem 2rem 1rem;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
 }
 
 .footer-container {
@@ -336,227 +321,90 @@ canvas {
     margin-bottom: 1rem;
     font-size: 1.2rem;
     color: #6bb77b;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
-.footer-description {
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.6;
-    margin-bottom: 1rem;
-}
+.footer-description { color: rgba(255,255,255,0.9); line-height: 1.6; margin-bottom: 1rem; }
 
-.social-links {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-}
+.social-links { display: flex; gap: 1rem; margin-top: 1rem; }
+.social-link  { font-size: 1.5rem; transition: transform 0.3s; }
+.social-link:hover { transform: scale(1.2); }
+.social-link i { color: white; transition: color 0.3s; }
+.social-link:hover .fa-facebook  { color: #1877f2; }
+.social-link:hover .fa-instagram { color: #e4405f; }
+.social-link:hover .fa-youtube   { color: #ff0000; }
 
-.social-link {
-    font-size: 1.5rem;
-    transition: transform 0.3s;
-}
-
-.social-link:hover {
-    transform: scale(1.2);
-}
-
-/* Social media icons - white by default, brand colors on hover */
-.social-link i {
-    color: white;
-    transition: color 0.3s;
-}
-
-.social-link:hover .fa-facebook {
-    color: #1877f2;
-}
-
-.social-link:hover .fa-instagram {
-    color: #e4405f;
-}
-
-.social-link:hover .fa-youtube {
-    color: #ff0000;
-}
-
-.footer-links {
-    list-style: none;
-}
-
-.footer-links li {
-    margin-bottom: 0.5rem;
-}
-
-.footer-links a {
-    color: rgba(255, 255, 255, 0.9);
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.footer-links a:hover {
-    color: #6bb77b;
-    text-decoration: underline;
-}
+.footer-links     { list-style: none; }
+.footer-links li  { margin-bottom: 0.5rem; }
+.footer-links a   { color: rgba(255,255,255,0.9); text-decoration: none; transition: color 0.3s; }
+.footer-links a:hover { color: #6bb77b; text-decoration: underline; }
 
 .footer-bottom {
     max-width: 1200px;
     margin: 0 auto;
     padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px solid rgba(255,255,255,0.2);
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     gap: 0.5rem;
     text-align: center;
 }
 
-.footer-bottom p {
-    color: rgba(255, 255, 255, 0.8);
-}
+.footer-bottom p { color: rgba(255,255,255,0.8); }
+.footer-bottom-links { display: flex; gap: 2rem; }
+.footer-bottom-links a { color: rgba(255,255,255,0.9); text-decoration: none; transition: color 0.3s; }
+.footer-bottom-links a:hover { color: #6bb77b; text-decoration: underline; }
 
-.footer-bottom-links {
-    display: flex;
-    gap: 2rem;
-}
 
-.footer-bottom-links a {
-    color: rgba(255, 255, 255, 0.9);
-    text-decoration: none;
-    transition: color 0.3s;
-}
+/* ===== RESPONSIVE ===== */
 
-.footer-bottom-links a:hover {
-    color: #6bb77b;
-    text-decoration: underline;
-}
-
-/* ===== RESPONSIVE STYLES ===== */
-
-/* Tablet and smaller desktop screens */
+/* Tablet ≤ 768px */
 @media (max-width: 768px) {
-    /* Navigation responsive styles */
-    .nav-container {
-        padding: 1rem;
-    }
+
+    .nav-container { padding: 1rem; }
 
     .nav-menu {
         display: none;
         position: absolute;
         top: 100%;
-        left: 0;
-        right: 0;
-        background: rgba(0, 0, 0, 0.95);
+        left: 0; right: 0;
+        background: rgba(0,0,0,0.95);
         flex-direction: column;
         padding: 1rem;
     }
 
-    .nav-menu.active {
-        display: flex;
-    }
+    .nav-menu.active         { display: flex; }
+    .nav-item, .nav-link     { width: 100%; text-align: center; }
+    .nav-link                { padding: 1rem; }
+    .mobile-menu-toggle      { display: flex; }
 
-    .nav-item,
-    .nav-link {
-        width: 100%;
-        text-align: center;
-    }
+    header h1     { font-size: 1.8rem; }
+    .dashboard    { grid-template-columns: 1fr; }
+    .sensor-value { font-size: 2.5rem; }
+    canvas        { height: 250px !important; }
 
-    .nav-link {
-        padding: 1rem;
-    }
-
-    .mobile-menu-toggle {
-        display: flex;
-    }
-
-    /* Reduce header title size */
-    header h1 {
-        font-size: 1.8rem;
-    }
-
-    /* Stack sensor cards vertically on smaller screens */
-    .dashboard {
-        grid-template-columns: 1fr;
-    }
-
-    /* Reduce sensor value size */
-    .sensor-value {
-        font-size: 2.5rem;
-    }
-
-    /* Reduce chart height on tablets */
-    canvas {
-        height: 250px !important;
-    }
-
-    /* Footer responsive styles */
-    .footer {
-        padding: 2rem 1rem 1rem;
-    }
-
-    .footer-container {
-        grid-template-columns: 1fr;
-    }
-
+    .footer              { padding: 2rem 1rem 1rem; }
+    .footer-container    { grid-template-columns: 1fr; }
     .footer-section,
-    .footer-links {
-        text-align: center;
-    }
-
-    .social-links {
-        justify-content: center;
-    }
+    .footer-links        { text-align: center; }
+    .social-links        { justify-content: center; }
 }
 
-/* Mobile phone screens */
+/* Mobile ≤ 480px */
 @media (max-width: 480px) {
-    /* Navigation mobile styles */
-    .nav-container {
-        flex-direction: column;
-        position: relative;
-    }
 
-    .nav-brand {
-        font-size: 1.2rem;
-    }
+    .nav-container  { flex-direction: column; position: relative; }
+    .nav-brand      { font-size: 1.2rem; }
+    .brand-icon     { font-size: 1.5rem; }
+    .mobile-menu-toggle { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); }
+    .nav-menu       { margin-top: 1rem; }
 
-    .brand-icon {
-        font-size: 1.5rem;
-    }
+    header h1     { font-size: 1.5rem; }
+    .sensor-card  { padding: 20px; }
+    .sensor-value { font-size: 2rem; }
+    .container    { padding: 10px; }
 
-    .mobile-menu-toggle {
-        position: absolute;
-        right: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    .nav-menu {
-        margin-top: 1rem;
-    }
-
-    /* Further reduce header title size */
-    header h1 {
-        font-size: 1.5rem;
-    }
-
-    /* Reduce card padding on mobile */
-    .sensor-card {
-        padding: 20px;
-    }
-
-    /* Further reduce sensor value size */
-    .sensor-value {
-        font-size: 2rem;
-    }
-
-    /* Container mobile padding */
-    .container {
-        padding: 10px;
-    }
-
-    /* Footer mobile adjustments */
-    .footer-bottom-links {
-        flex-direction: column;
-        gap: 1rem;
-    }
+    .weather-current      { flex-direction: column; }
+    .footer-bottom-links  { flex-direction: column; gap: 1rem; }
 }
