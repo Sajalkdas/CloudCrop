@@ -1,81 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta tags for character encoding and responsive design -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CloudCrop</title>
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Chart.js library for data visualization -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Font Awesome for social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Main container for the dashboard -->
+
+    <!-- ===== NAVIGATION BAR ===== -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🌱</span>
+                <span class="brand-name">CloudCrop</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#dashboard"  class="nav-link active">Dashboard</a></li>
+                <li class="nav-item"><a href="#products"   class="nav-link">Products</a></li>
+                <li class="nav-item"><a href="CloudCrop End of Semester Report.pdf" class="nav-link">Documentation</a></li>
+                <li class="nav-item"><a href="#support" class="nav-link">Support</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
     <div class="container">
+
+        <!-- Page header -->
         <header>
             <h1>CloudCrop 🌱</h1>
-            <p class="last-update">Last updated: <span id="timestamp"></span></p>
+            <p class="last-update">Last updated: <span id="timestamp">--</span></p>
         </header>
 
-        <!-- Dashboard grid containing all sensor cards -->
-        <div class="dashboard">
-            
-            <!-- Temperature Sensor Card -->
+        <!-- ── Sensor Cards ── -->
+        <div class="dashboard" id="dashboard">
+
+            <!-- Temperature -->
             <div class="sensor-card">
                 <div class="sensor-header">
                     <div class="sensor-icon">🌡️</div>
                     <div class="sensor-title">Temperature</div>
                 </div>
-                <!-- Temperature value display -->
                 <div class="sensor-value temp">
                     <span id="temp-value">--</span>
                     <span class="sensor-unit">°F</span>
                 </div>
-                <!-- Temperature status indicator -->
                 <span id="temp-status" class="sensor-status">Loading...</span>
             </div>
 
-            <!-- Soil Moisture Sensor Card -->
+            <!-- Soil Moisture — displays as % -->
             <div class="sensor-card">
                 <div class="sensor-header">
                     <div class="sensor-icon">💧</div>
                     <div class="sensor-title">Soil Moisture</div>
                 </div>
-                <!-- Moisture value display -->
                 <div class="sensor-value moisture">
                     <span id="moisture-value">--</span>
                     <span class="sensor-unit">%</span>
                 </div>
-                <!-- Moisture status indicator -->
                 <span id="moisture-status" class="sensor-status">Loading...</span>
             </div>
 
-            <!-- Sunlight Sensor Card -->
+            <!-- Sunlight -->
             <div class="sensor-card">
                 <div class="sensor-header">
                     <div class="sensor-icon">☀️</div>
                     <div class="sensor-title">Sunlight</div>
                 </div>
-                <!-- Light value display -->
                 <div class="sensor-value light">
                     <span id="light-value">--</span>
                     <span class="sensor-unit">lux</span>
                 </div>
-                <!-- Light status indicator -->
                 <span id="light-status" class="sensor-status">Loading...</span>
             </div>
-        </div>
 
-        <!-- Chart container for historical data visualization -->
+        </div><!-- /dashboard -->
+
+        <!-- ── Weather Section ── -->
+        <div class="weather-container">
+            <div class="chart-title">🌤️ Current Weather &amp; 2-Hour Forecast</div>
+            <div id="weather-error" class="weather-error" style="display:none;">
+                Unable to load weather data.
+            </div>
+
+            <!-- Three equal cards: Outside Temp | Conditions | 2-Hour Forecast -->
+            <div class="weather-current">
+
+                <div class="weather-card weather-card--current">
+                    <div class="weather-icon">🌡️</div>
+                    <div class="weather-label">Outside Temp</div>
+                    <div class="weather-value"><span id="weather-temp">--</span> °F</div>
+                </div>
+
+                <div class="weather-card weather-card--current">
+                    <div class="weather-icon">☁️</div>
+                    <div class="weather-label">Conditions</div>
+                    <div class="weather-value" id="weather-desc">--</div>
+                </div>
+
+                <div class="weather-card weather-card--current">
+                    <div class="weather-label">2-Hour Forecast</div>
+                    <div class="forecast-icon" id="forecast-icon">--</div>
+                    <div class="forecast-temp" id="forecast-temp">-- °F</div>
+                    <div class="forecast-desc" id="forecast-desc">--</div>
+                </div>
+
+            </div>
+        </div><!-- /weather-container -->
+
+        <!-- ── Historical Chart ── -->
         <div class="chart-container">
             <div class="chart-title">📊 Historical Data (Last 24 Hours)</div>
-            <!-- Canvas element where Chart.js will render the graph -->
-            <canvas id="dataChart"></canvas>
+            <img src="Graph.png" alt="Historical Data Chart showing Temperature, Soil Moisture, and Sunlight over the last 24 hours" class="historical-chart-img">
         </div>
-    </div>
 
-    <!-- Link to JavaScript file -->
+    </div><!-- /container -->
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-container">
+
+            <div class="footer-section">
+                <h3 class="footer-heading">CloudCrop</h3>
+                <p class="footer-description">Automated Watering System</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link" aria-label="Youtube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4 class="footer-heading">Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#analytics">Analytics</a></li>
+                    <li><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="#products">Products</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4 class="footer-heading">Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="https://home.openweathermap.org/api_keys">API</a></li>
+                    <li><a href="#community">Community</a></li>
+                    <li><a href="CloudCrop End of Semester Report.pdf">Documentation</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4 class="footer-heading">Contact</h4>
+                <ul class="footer-links">
+                    <li>info@cloudcrop.com</li>
+                    <li>(203) 550-9000</li>
+                    <li>Bridgeport, CT</li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-bottom-links">
+                <a href="#terms&privacy">Terms &amp; Privacy Policy</a>
+            </div>
+            <p>&copy; 2026 CloudCrop. All rights reserved.</p>
+        </div>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>

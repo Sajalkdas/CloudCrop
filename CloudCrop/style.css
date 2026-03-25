@@ -1,58 +1,136 @@
 /**
- * CloudCorp Styles
- * 
- * This stylesheet provides responsive design for the environmental 
- * data dashboard with mobile compatibility and modern visual effects.
+ * CloudCrop Styles
+ *
+ * Responsive dashboard stylesheet for the CloudCrop Wating System.
+ *
+ * Status badge classes:
+ *   .status-good     – Healthy / Optimal  (green)
+ *   .status-warning  – Caution            (amber / blue)
+ *   .status-critical – Extreme            (red / dark blue)
+ *
+ * Author: Sajal Das
+ * Modified: 3/25/2026
  */
 
-/* ===== BASE STYLES ===== */
+/* ===== BASE ===== */
 
-/* Reset default margins and paddings, use border-box sizing */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Body styling with green gradient background */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #2d5016 0%, #3a7d44 50%, #6bb77b 100%);
     min-height: 100vh;
-    padding: 20px;
 }
 
-/* Main container with max-width for large screens */
 .container {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 20px;
 }
 
-/* ===== HEADER STYLES ===== */
 
-/* Header section styling */
+/* ===== NAVIGATION ===== */
+
+.navbar {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.brand-icon { font-size: 2rem; }
+.brand-name { text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 1rem;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s, transform 0.2s;
+    display: block;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Hamburger button — hidden on desktop */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.mobile-menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+
+/* ===== PAGE HEADER ===== */
+
 header {
     text-align: center;
     color: white;
     margin-bottom: 30px;
+    padding-top: 20px;
 }
 
-/* Main title styling with shadow effect */
 header h1 {
     font-size: 2.5rem;
     margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Last update timestamp styling */
 .last-update {
     font-size: 0.9rem;
     opacity: 0.9;
 }
 
-/* ===== DASHBOARD GRID STYLES ===== */
 
-/* Grid layout for sensor cards - responsive with auto-fit */
+/* ===== SENSOR DASHBOARD GRID ===== */
+
+/* Three equal columns; collapses to one on small screens */
 .dashboard {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -60,61 +138,55 @@ header h1 {
     margin-bottom: 30px;
 }
 
-/* ===== SENSOR CARD STYLES ===== */
 
-/* Individual sensor card styling */
+/* ===== SENSOR CARDS ===== */
+
 .sensor-card {
     background: white;
-    border-radius: 15px;
+    border-radius: 25px;
     padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
 }
 
-/* Hover effect for sensor cards - lifts up with stronger shadow */
 .sensor-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
 }
 
-/* Header section of each sensor card */
 .sensor-header {
     display: flex;
     align-items: center;
+    justify-content: center;
     margin-bottom: 20px;
 }
 
-/* Icon styling for each sensor type */
-.sensor-icon {
-    font-size: 2.5rem;
-    margin-right: 15px;
-}
+.sensor-icon  { font-size: 2.5rem; margin-right: 15px; }
+.sensor-title { font-size: 1.1rem; color: #666; font-weight: 600; }
 
-/* Title text for each sensor */
-.sensor-title {
-    font-size: 1.1rem;
-    color: #666;
-    font-weight: 600;
-}
-
-/* Main value display for sensor readings */
+/* Numeric readout — color driven by JS status */
 .sensor-value {
     font-size: 3rem;
     font-weight: bold;
     margin-bottom: 10px;
-    transition: color 0.3s ease;
 }
 
-/* Unit text styling (°F, %, lux) */
+/* Unit label: °F | % | lux */
 .sensor-unit {
     font-size: 1.2rem;
     color: #999;
     margin-left: 5px;
 }
 
-/* ===== STATUS INDICATOR STYLES ===== */
 
-/* Base status badge styling */
+/* ===== STATUS ===== */
+
+/*
+ * Temperature  : Extreme Cold | Cold | Cool | Hot | Extreme Hot
+ * Soil Moisture: Extreme Dry | Dry | Optimal | Wet | Extreme Wet
+ * Sunlight     : Extreme Low | Low | Medium | High | Extreme High
+ */
 .sensor-status {
     display: inline-block;
     padding: 5px 15px;
@@ -123,36 +195,75 @@ header h1 {
     font-weight: 600;
 }
 
-/* Status color for normal readings */
-.status-good {
-    background: #d4edda;
-    color: #155724;
+.status-good     { background: #d4edda; color: #155724; } /* Healthy  */
+.status-warning  { background: #fff3cd; color: #856404; } /* Caution  */
+.status-critical { background: #f8d7da; color: #721c24; } /* Extreme  */
+
+
+/* ===== WEATHER API SECTION ===== */
+
+.weather-container {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    margin-bottom: 30px;
 }
 
-/* Status color for warning readings */
-.status-warning {
-    background: #fff3cd;
-    color: #856404;
+/* Three equal cards in a flex row */
+.weather-current {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
-/* Status color for critical readings */
-.status-critical {
-    background: #f8d7da;
-    color: #721c24;
+.weather-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s;
 }
 
-/* ===== CHART CONTAINER STYLES ===== */
+.weather-card:hover { transform: translateY(-3px); }
 
-/* Container for the historical data chart */
+/* Each of the three cards takes equal space */
+.weather-card--current {
+    flex: 1;
+    min-width: 140px;
+}
+
+.weather-icon  { font-size: 2rem; margin-bottom: 8px; }
+.weather-label { font-size: 0.85rem; color: #666; font-weight: 600; margin-bottom: 6px; }
+.weather-value { font-size: 1.3rem; font-weight: bold; color: #3a7d44; text-transform: capitalize; }
+
+/* 2-hour forecast card internals */
+.forecast-icon { font-size: 2rem; margin: 8px 0; }
+.forecast-temp { font-size: 1.3rem; font-weight: bold; color: #3a7d44; margin-bottom: 4px; }
+.forecast-desc { font-size: 0.85rem; color: #666; text-transform: capitalize; line-height: 1.4; }
+
+/* Error banner */
+.weather-error {
+    color: #dc2626;
+    background: #fef2f2;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+
+/* ===== HISTORICAL CHART ===== */
+
 .chart-container {
     background: white;
     border-radius: 15px;
     padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     margin-bottom: 20px;
 }
 
-/* Chart title styling */
 .chart-title {
     font-size: 1.3rem;
     margin-bottom: 20px;
@@ -160,73 +271,128 @@ header h1 {
     font-weight: 600;
 }
 
-/* Canvas sizing for Chart.js */
-canvas {
-    width: 100% !important;
-    height: 300px !important;
+.historical-chart-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
 }
 
-/* ===== COLOR CLASSES FOR SENSOR VALUES ===== */
 
-/* Temperature value color (red) */
-.temp {
-    color: #ff6b6b;
+/* ===== SENSOR VALUE ACCENT COLORS ===== */
+
+.temp     { color: #ff6b6b; }  /* Temperature    — red        */
+.moisture { color: #4ecdc4; }  /* Soil Moisture  — teal       */
+.light    { color: #ffd93d; }  /* Sunlight       — yellow     */
+
+
+/* ===== FOOTER ===== */
+
+.footer {
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    color: white;
+    margin-top: 4rem;
+    padding: 3rem 2rem 1rem;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
 }
 
-/* Moisture value color (teal) */
-.moisture {
-    color: #4ecdc4;
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
 }
 
-/* Light value color (yellow) */
-.light {
-    color: #ffd93d;
+.footer-heading {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #6bb77b;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
-/* ===== RESPONSIVE STYLES ===== */
+.footer-description { color: rgba(255,255,255,0.9); line-height: 1.6; margin-bottom: 1rem; }
 
-/* Tablet and smaller desktop screens */
+.social-links { display: flex; gap: 1rem; margin-top: 1rem; }
+.social-link  { font-size: 1.5rem; transition: transform 0.3s; }
+.social-link:hover { transform: scale(1.2); }
+.social-link i { color: white; transition: color 0.3s; }
+.social-link:hover .fa-facebook  { color: #1877f2; }
+.social-link:hover .fa-instagram { color: #e4405f; }
+.social-link:hover .fa-youtube   { color: #ff0000; }
+
+.footer-links     { list-style: none; }
+.footer-links li  { margin-bottom: 0.5rem; }
+.footer-links a   { color: rgba(255,255,255,0.9); text-decoration: none; transition: color 0.3s; }
+.footer-links a:hover { color: #6bb77b; text-decoration: underline; }
+
+.footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.footer-bottom p { color: rgba(255,255,255,0.8); }
+.footer-bottom-links { display: flex; gap: 2rem; }
+.footer-bottom-links a { color: rgba(255,255,255,0.9); text-decoration: none; transition: color 0.3s; }
+.footer-bottom-links a:hover { color: #6bb77b; text-decoration: underline; }
+
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablet ≤ 768px */
 @media (max-width: 768px) {
-    /* Reduce header title size */
-    header h1 {
-        font-size: 1.8rem;
+
+    .nav-container { padding: 1rem; }
+
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0; right: 0;
+        background: rgba(0,0,0,0.95);
+        flex-direction: column;
+        padding: 1rem;
     }
 
-    /* Stack sensor cards vertically on smaller screens */
-    .dashboard {
-        grid-template-columns: 1fr;
-    }
+    .nav-menu.active         { display: flex; }
+    .nav-item, .nav-link     { width: 100%; text-align: center; }
+    .nav-link                { padding: 1rem; }
+    .mobile-menu-toggle      { display: flex; }
 
-    /* Reduce sensor value size */
-    .sensor-value {
-        font-size: 2.5rem;
-    }
+    header h1     { font-size: 1.8rem; }
+    .dashboard    { grid-template-columns: 1fr; }
+    .sensor-value { font-size: 2.5rem; }
 
-    /* Reduce chart height on tablets */
-    canvas {
-        height: 250px !important;
-    }
+    .footer              { padding: 2rem 1rem 1rem; }
+    .footer-container    { grid-template-columns: 1fr; }
+    .footer-section,
+    .footer-links        { text-align: center; }
+    .social-links        { justify-content: center; }
 }
 
-/* Mobile phone screens */
+/* Mobile ≤ 480px */
 @media (max-width: 480px) {
-    /* Reduce body padding on mobile */
-    body {
-        padding: 10px;
-    }
 
-    /* Further reduce header title size */
-    header h1 {
-        font-size: 1.5rem;
-    }
+    .nav-container  { flex-direction: column; position: relative; }
+    .nav-brand      { font-size: 1.2rem; }
+    .brand-icon     { font-size: 1.5rem; }
+    .mobile-menu-toggle { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); }
+    .nav-menu       { margin-top: 1rem; }
 
-    /* Reduce card padding on mobile */
-    .sensor-card {
-        padding: 20px;
-    }
+    header h1     { font-size: 1.5rem; }
+    .sensor-card  { padding: 20px; }
+    .sensor-value { font-size: 2rem; }
+    .container    { padding: 10px; }
 
-    /* Further reduce sensor value size */
-    .sensor-value {
-        font-size: 2rem;
-    }
+    .weather-current      { flex-direction: column; }
+    .footer-bottom-links  { flex-direction: column; gap: 1rem; }
 }
