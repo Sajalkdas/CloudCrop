@@ -1,3 +1,28 @@
+<!-- * CloudCrop - Main Dashboard (index.html)
+ *
+ * This file represents the main user dashboard of the CloudCrop system.
+ * It displays real-time environmental sensor data including temperature,
+ * soil moisture, and sunlight levels, along with weather updates and
+ * historical analytics charts.
+ *
+ * Features:
+ * - Protected dashboard (requires Firebase authentication)
+ * - Real-time sensor data display (temperature, moisture, light)
+ * - Weather API integration (OpenWeatherMap)
+ * - Historical data visualization using Chart.js
+ * - Responsive navigation bar with mobile support
+ * - User session handling and logout functionality
+ * - Auth overlay control (login/register/forgot password panels)
+ *
+ * Dependencies:
+ * - Firebase Authentication (v9+ compat)
+ * - Chart.js
+ * - Font Awesome
+ *
+ * Author: Sajal Das
+ * Modified: 4/11/2026
+ -->
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,12 +30,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CloudCrop</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Font Awesome for social icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js for historical data visualization -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
+
+    <!-- ===== AUTH MODAL ===== -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-modal">
+            <div class="auth-brand">
+                <span class="auth-brand-icon"></span>
+                <span class="auth-brand-name">CloudCrop</span>
+            </div>
+
+            <!-- Login Panel -->
+            <div id="panel-login" class="auth-panel active">
+                <h2 class="auth-title">Welcome</h2>
+                <p class="auth-subtitle">Sign in to your dashboard</p>
+                <div id="login-error" class="auth-error" style="display:none;"></div>
+                <div class="auth-field">
+                    <label>Email</label>
+                    <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email">
+                </div>
+                <div class="auth-field">
+                    <label>Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="login-password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="current-password">
+                        <button type="button" class="eye-toggle" onclick="togglePassword('login-password', this)" aria-label="Toggle password visibility">
+                            <svg class="eye-icon eye-show" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <svg class="eye-icon eye-hide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <button class="auth-btn" id="btn-login">Sign In</button>
+                <div class="auth-links">
+                    <a href="#" id="go-forgot">Forgot password?</a>
+                    <a href="#" id="go-register">Create an account</a>
+                </div>
+            </div>
+
+            <!-- Register Panel -->
+            <div id="panel-register" class="auth-panel">
+                <h2 class="auth-title">Create Account</h2>
+                <p class="auth-subtitle">Join CloudCrop today</p>
+                <div id="register-error" class="auth-error" style="display:none;"></div>
+                <div class="auth-field">
+                    <label>Email</label>
+                    <input type="email" id="register-email" placeholder="you@example.com" autocomplete="email">
+                </div>
+                <div class="auth-field">
+                    <label>Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="register-password" placeholder="At least 6 characters" autocomplete="new-password">
+                        <button type="button" class="eye-toggle" onclick="togglePassword('register-password', this)" aria-label="Toggle password visibility">
+                            <svg class="eye-icon eye-show" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <svg class="eye-icon eye-hide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="auth-field">
+                    <label>Confirm Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="register-confirm" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="new-password">
+                        <button type="button" class="eye-toggle" onclick="togglePassword('register-confirm', this)" aria-label="Toggle password visibility">
+                            <svg class="eye-icon eye-show" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <svg class="eye-icon eye-hide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <button class="auth-btn" id="btn-register">Create Account</button>
+                <div class="auth-links">
+                    <a href="#" id="go-login">Already have an account? Sign in</a>
+                </div>
+            </div>
+
+            <!-- Forgot Password Panel -->
+            <div id="panel-forgot" class="auth-panel">
+                <h2 class="auth-title">Reset Password</h2>
+                <div id="forgot-error" class="auth-error" style="display:none;"></div>
+                <div id="forgot-success" class="auth-success" style="display:none;"></div>
+                <div class="auth-field">
+                    <label>Email</label>
+                    <input type="email" id="forgot-email" placeholder="you@example.com" autocomplete="email">
+                </div>
+                <button class="auth-btn" id="btn-forgot">Send Reset Email</button>
+                <div class="auth-links">
+                    <a href="#" id="go-login-2">Back to Sign In</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ===== NAVIGATION BAR ===== -->
     <nav class="navbar">
@@ -20,11 +129,17 @@
                 <span class="brand-name">CloudCrop</span>
             </div>
             <ul class="nav-menu">
-                <li class="nav-item"><a href="#dashboard"  class="nav-link active">Dashboard</a></li>
-                <li class="nav-item"><a href="#products"   class="nav-link">Products</a></li>
+                <li class="nav-item"><a href="#dashboard" class="nav-link active">Dashboard</a></li>
+                <li class="nav-item"><a href="#products" class="nav-link">Products</a></li>
                 <li class="nav-item"><a href="CloudCrop End of Semester Report.pdf" class="nav-link">Documentation</a></li>
                 <li class="nav-item"><a href="#support" class="nav-link">Support</a></li>
             </ul>
+            <div class="nav-user-section">
+                <span id="nav-user-email" class="nav-user-email"></span>
+                <button id="btn-logout" class="nav-logout-btn" style="display:none;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
             <button class="mobile-menu-toggle" aria-label="Toggle menu">
                 <span></span><span></span><span></span>
             </button>
@@ -33,17 +148,12 @@
 
     <!-- ===== MAIN CONTENT ===== -->
     <div class="container">
-
-        <!-- Page header -->
         <header>
             <h1>CloudCrop 🌱</h1>
             <p class="last-update">Last updated: <span id="timestamp">--</span></p>
         </header>
 
-        <!-- ── Sensor Cards ── -->
         <div class="dashboard" id="dashboard">
-
-            <!-- Temperature -->
             <div class="sensor-card">
                 <div class="sensor-header">
                     <div class="sensor-icon">🌡️</div>
@@ -56,7 +166,6 @@
                 <span id="temp-status" class="sensor-status">Loading...</span>
             </div>
 
-            <!-- Soil Moisture — displays as % -->
             <div class="sensor-card">
                 <div class="sensor-header">
                     <div class="sensor-icon">💧</div>
@@ -69,7 +178,6 @@
                 <span id="moisture-status" class="sensor-status">Loading...</span>
             </div>
 
-            <!-- Sunlight -->
             <div class="sensor-card">
                 <div class="sensor-header">
                     <div class="sensor-icon">☀️</div>
@@ -81,53 +189,40 @@
                 </div>
                 <span id="light-status" class="sensor-status">Loading...</span>
             </div>
+        </div>
 
-        </div><!-- /dashboard -->
-
-        <!-- ── Weather Section ── -->
         <div class="weather-container">
             <div class="chart-title">🌤️ Current Weather &amp; 2-Hour Forecast</div>
-            <div id="weather-error" class="weather-error" style="display:none;">
-                Unable to load weather data.
-            </div>
-
-            <!-- Three equal cards: Outside Temp | Conditions | 2-Hour Forecast -->
+            <div id="weather-error" class="weather-error" style="display:none;">Unable to load weather data.</div>
             <div class="weather-current">
-
                 <div class="weather-card weather-card--current">
                     <div class="weather-icon">🌡️</div>
                     <div class="weather-label">Outside Temp</div>
                     <div class="weather-value"><span id="weather-temp">--</span> °F</div>
                 </div>
-
                 <div class="weather-card weather-card--current">
                     <div class="weather-icon">☁️</div>
                     <div class="weather-label">Conditions</div>
                     <div class="weather-value" id="weather-desc">--</div>
                 </div>
-
                 <div class="weather-card weather-card--current">
                     <div class="weather-label">2-Hour Forecast</div>
                     <div class="forecast-icon" id="forecast-icon">--</div>
                     <div class="forecast-temp" id="forecast-temp">-- °F</div>
                     <div class="forecast-desc" id="forecast-desc">--</div>
                 </div>
-
             </div>
-        </div><!-- /weather-container -->
+        </div>
 
-        <!-- ── Historical Chart ── -->
         <div class="chart-container">
             <div class="chart-title">📊 Historical Data (Last 24 Hours)</div>
             <canvas id="dataChart"></canvas>
         </div>
-
-    </div><!-- /container -->
+    </div>
 
     <!-- ===== FOOTER ===== -->
     <footer class="footer">
         <div class="footer-container">
-
             <div class="footer-section">
                 <h3 class="footer-heading">CloudCrop</h3>
                 <p class="footer-description">Automated Watering System</p>
@@ -137,7 +232,6 @@
                     <a href="#" class="social-link" aria-label="Youtube"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
-
             <div class="footer-section">
                 <h4 class="footer-heading">Quick Links</h4>
                 <ul class="footer-links">
@@ -146,7 +240,6 @@
                     <li><a href="#products">Products</a></li>
                 </ul>
             </div>
-
             <div class="footer-section">
                 <h4 class="footer-heading">Resources</h4>
                 <ul class="footer-links">
@@ -155,7 +248,6 @@
                     <li><a href="CloudCrop End of Semester Report.pdf">Documentation</a></li>
                 </ul>
             </div>
-
             <div class="footer-section">
                 <h4 class="footer-heading">Contact</h4>
                 <ul class="footer-links">
@@ -164,7 +256,6 @@
                     <li>Bridgeport, CT</li>
                 </ul>
             </div>
-
         </div>
         <div class="footer-bottom">
             <div class="footer-bottom-links">
@@ -174,6 +265,20 @@
         </div>
     </footer>
 
+    <!-- Firebase SDK (v9 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="script.js"></script>
+
+    <!-- Eye toggle helper -->
+    <script>
+    function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        btn.querySelector('.eye-show').style.display = isHidden ? 'none' : '';
+        btn.querySelector('.eye-hide').style.display = isHidden ? ''     : 'none';
+    }
+    </script>
 </body>
 </html>
