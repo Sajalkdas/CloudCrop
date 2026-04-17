@@ -1,39 +1,11 @@
 /**
  * CloudCrop - Main JavaScript (script.js)
  *
- * This file controls all frontend logic for the CloudCrop dashboard.
- * It manages Firebase authentication state, real-time UI updates,
- * sensor data simulation/updates, weather API integration, and
- * interactive dashboard features.
- *
- * Core Responsibilities:
- * - Firebase Authentication (login state monitoring, logout handling)
- * - Auth overlay control (login/register/forgot password UI switching)
- * - Real-time sensor data updates (temperature, moisture, light)
- * - Status evaluation (good / warning / critical thresholds)
- * - Chart.js historical data visualization updates
- * - OpenWeatherMap API integration for live weather data
- * - Mobile navigation menu toggle functionality
- * - UI state management and dynamic DOM updates
- *
- * Features:
- * - Auto-redirect if user is not authenticated
- * - Live dashboard refresh logic
- * - Error handling for API and auth failures
- * - Responsive UI interactions
- *
- * Dependencies:
- * - Firebase Authentication (v9 compat SDK)
- * - Chart.js
- * - OpenWeatherMap API
- *
  * Author: Sajal Das
- * Modified: 4/13/2026
+ * Modified: 4/16/2026
  */
 
 // ===== FIREBASE CONFIGURATION =====
-// Replace these values with your own Firebase project credentials.
-// Get them from: https://console.firebase.google.com → Project Settings → Your Apps
 const firebaseConfig = {
     apiKey:            "AIzaSyDGnKs56xNrxZoz_zmfpkny1_B7ylRoU3s",
     authDomain:        "cloudcorp-39ad1.firebaseapp.com",
@@ -48,9 +20,14 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
 
+// ===== RASPBERRY PI API BASE URL =====
+// Set this to your Pi's IP address, e.g. 'http://192.168.1.42:5000'
+// Leave empty string if this frontend is served directly from the Pi
+const PI_API = '';
+
+
 // ===== AUTH PANEL HELPERS =====
 
-/** Shows one auth panel and hides the others. */
 function showPanel(id) {
     document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
@@ -76,42 +53,39 @@ function showSuccess(elId, msg) {
     el.style.display = 'block';
 }
 
-/** Friendly error messages for common Firebase auth codes. */
 function friendlyError(code) {
     const map = {
-        'auth/user-not-found':        'No account found with that email.',
-        'auth/wrong-password':        'Incorrect password. Please try again.',
-        'auth/invalid-email':         'Please enter a valid email address.',
-        'auth/email-already-in-use':  'An account with that email already exists.',
-        'auth/weak-password':         'Password must be at least 6 characters.',
-        'auth/too-many-requests':     'Too many attempts. Please wait a moment.',
-        'auth/network-request-failed':'Network error. Check your connection.',
-        'auth/invalid-credential':    'Invalid email or password.',
+        'auth/user-not-found':            'No account found with that email.',
+        'auth/wrong-password':            'Incorrect password. Please try again.',
+        'auth/invalid-email':             'Please enter a valid email address.',
+        'auth/email-already-in-use':      'An account with that email already exists.',
+        'auth/weak-password':             'Password must be at least 6 characters.',
+        'auth/too-many-requests':         'Too many attempts. Please wait a moment.',
+        'auth/network-request-failed':    'Network error. Check your connection.',
+        'auth/invalid-credential':        'Invalid email or password.',
         'auth/invalid-login-credentials': 'Invalid email or password.',
-        'auth/user-disabled':         'This account has been disabled.'
+        'auth/user-disabled':             'This account has been disabled.'
     };
-    console.log('Firebase error code:', code); // temporary — remove after testing
+    console.log('Firebase error code:', code); // remove after testing
     return map[code] || 'Something went wrong. Please try again.';
 }
 
+
 // ===== AUTH STATE LISTENER =====
-// Runs immediately when Firebase resolves the current session.
 
 auth.onAuthStateChanged(function (user) {
-    const overlay = document.getElementById('auth-overlay');
-    const logoutBtn   = document.getElementById('btn-logout');
-    const userEmailEl = document.getElementById('nav-user-email');
+    const overlay      = document.getElementById('auth-overlay');
+    const logoutBtn    = document.getElementById('btn-logout');
+    const userEmailEl  = document.getElementById('nav-user-email');
 
     if (user) {
-        // Signed in — hide modal, show user info + logout button
         overlay.classList.add('hidden');
-        logoutBtn.style.display   = 'inline-flex';
-        userEmailEl.textContent   = user.email;
+        logoutBtn.style.display  = 'inline-flex';
+        userEmailEl.textContent  = user.email;
     } else {
-        // Signed out — show modal
         overlay.classList.remove('hidden');
-        logoutBtn.style.display   = 'none';
-        userEmailEl.textContent   = '';
+        logoutBtn.style.display  = 'none';
+        userEmailEl.textContent  = '';
         showPanel('panel-login');
     }
 });
@@ -121,13 +95,13 @@ auth.onAuthStateChanged(function (user) {
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ── Auth panel navigation ───────────────────────────────────────────
+    // ── Auth panel navigation ──────────────────────────────────────────
     document.getElementById('go-forgot').addEventListener('click',   e => { e.preventDefault(); showPanel('panel-forgot');   });
     document.getElementById('go-register').addEventListener('click', e => { e.preventDefault(); showPanel('panel-register'); });
     document.getElementById('go-login').addEventListener('click',    e => { e.preventDefault(); showPanel('panel-login');    });
     document.getElementById('go-login-2').addEventListener('click',  e => { e.preventDefault(); showPanel('panel-login');    });
 
-    // ── Login ───────────────────────────────────────────────────────────
+    // ── Login ──────────────────────────────────────────────────────────
     document.getElementById('btn-login').addEventListener('click', async function () {
         const email    = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-password').value;
@@ -138,7 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
         this.textContent = 'Signing in…';
         try {
             await auth.signInWithEmailAndPassword(email, password);
-            // onAuthStateChanged handles hiding the modal
         } catch (err) {
             showError('login-error', friendlyError(err.code));
         } finally {
@@ -147,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // ── Register ────────────────────────────────────────────────────────
+    // ── Register ───────────────────────────────────────────────────────
     document.getElementById('btn-register').addEventListener('click', async function () {
         const email    = document.getElementById('register-email').value.trim();
         const password = document.getElementById('register-password').value;
@@ -160,7 +133,6 @@ document.addEventListener('DOMContentLoaded', function () {
         this.textContent = 'Creating account…';
         try {
             await auth.createUserWithEmailAndPassword(email, password);
-            // onAuthStateChanged handles hiding the modal
         } catch (err) {
             showError('register-error', friendlyError(err.code));
         } finally {
@@ -169,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // ── Forgot password ─────────────────────────────────────────────────
+    // ── Forgot password ────────────────────────────────────────────────
     document.getElementById('btn-forgot').addEventListener('click', async function () {
         const email = document.getElementById('forgot-email').value.trim();
         clearAuthMessages();
@@ -188,64 +160,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // ── Logout ──────────────────────────────────────────────────────────
+    // ── Logout ─────────────────────────────────────────────────────────
     document.getElementById('btn-logout').addEventListener('click', async function () {
         await auth.signOut();
     });
 
-    // Allow pressing Enter to submit on login inputs
+    // ── Enter key on login ─────────────────────────────────────────────
     ['login-email', 'login-password'].forEach(id => {
         document.getElementById(id).addEventListener('keydown', e => {
             if (e.key === 'Enter') document.getElementById('btn-login').click();
         });
     });
 
+    // ── Initial data load + polling ────────────────────────────────────
+    refreshDashboard();
+    setInterval(refreshDashboard, 30000); // refresh every 30 seconds
 
-    // ── Chart ──────────────────────────────────────────────────────────
-    const hist = generateHistoricalData();
-    const ctx  = document.getElementById('dataChart').getContext('2d');
-
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: hist.labels,
-            datasets: [
-                {
-                    label: 'Temperature (°F)',
-                    data: hist.tempData,
-                    borderColor: '#ff6b6b',
-                    backgroundColor: 'rgba(255,107,107,0.1)',
-                    tension: 0.4
-                },
-                {
-                    label: 'Soil Moisture (%)',
-                    data: hist.moistureData.map(v => Math.round(v / 950 * 100)),
-                    borderColor: '#4ecdc4',
-                    backgroundColor: 'rgba(78,205,196,0.1)',
-                    tension: 0.4
-                },
-                {
-                    label: 'Sunlight (lux ÷ 10)',
-                    data: hist.lightData.map(v => v / 10),
-                    borderColor: '#ffd93d',
-                    backgroundColor: 'rgba(255,217,61,0.1)',
-                    tension: 0.4
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: true, position: 'top' } },
-            scales:  { y: { beginAtZero: true } }
-        }
-    });
-
-    // ── Sensor dashboard ───────────────────────────────────────────────
-    updateDashboard();
-    setInterval(updateDashboard, 5000);
-
-    // ── Weather ────────────────────────────────────────────────────────
     fetchWeather();
     setInterval(fetchWeather, 60 * 1000);
 
@@ -275,14 +205,57 @@ document.addEventListener('DOMContentLoaded', function () {
 }); // end DOMContentLoaded
 
 
-// ===== SENSOR DATA GENERATION =====
+// ===== RASPBERRY PI DATA REFRESH =====
+// Fetches sensors and watering history from the Pi API in one go.
 
-function generateSensorData() {
-    return {
-        temperature: (Math.random() * 125).toFixed(1),
-        moisture:    Math.floor(Math.random() * 951),
-        light:       Math.floor(Math.random() * 1200)
-    };
+async function refreshDashboard() {
+    try {
+        const [sensorsRes, wateringsRes] = await Promise.all([
+            fetch(`${PI_API}/sensors`),
+            fetch(`${PI_API}/api/watering/history?hours=24`)
+        ]);
+
+        if (sensorsRes.ok) {
+            const sensors = await sensorsRes.json();
+            updateSensorsFromPi(sensors);
+        }
+
+        if (wateringsRes.ok) {
+            const waterings = await wateringsRes.json();
+            updateWateringTable(waterings);
+        }
+
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+    } catch (err) {
+        console.error('Dashboard refresh error:', err);
+        document.getElementById('timestamp').textContent = 'Connection lost — retrying...';
+    }
+}
+
+
+// ===== SENSOR UPDATE FROM PI =====
+// Maps the Pi API response shape to your existing sensor cards.
+// Pi returns: { temperature (°C), moisture (raw 0-950), light_level (lux) }
+
+function updateSensorsFromPi(data) {
+    if (!data || Object.keys(data).length === 0) return;
+
+    // Temperature: Pi gives °C, convert to °F for your dashboard
+    if (data.temperature != null) {
+        const tempF = parseFloat((data.temperature * 9 / 5 + 32).toFixed(1));
+        updateSensorCard('temp', tempF, 'temperature');
+    }
+
+    // Moisture: Pi gives raw ADC value (0–950)
+    if (data.moisture != null) {
+        updateSensorCard('moisture', data.moisture, 'moisture');
+    }
+
+    // Light: Pi gives lux directly
+    if (data.light_level != null) {
+        updateSensorCard('light', data.light_level, 'light');
+    }
 }
 
 
@@ -315,7 +288,7 @@ function updateSensorStatus(value, type) {
 }
 
 
-// ===== DASHBOARD UPDATE =====
+// ===== SENSOR CARD UPDATE =====
 
 function updateSensorCard(id, value, type) {
     const valueEl  = document.getElementById(`${id}-value`);
@@ -328,12 +301,28 @@ function updateSensorCard(id, value, type) {
     statusEl.className   = `sensor-status ${statusClass}`;
 }
 
-function updateDashboard() {
-    const data = generateSensorData();
-    updateSensorCard('temp',     data.temperature, 'temperature');
-    updateSensorCard('moisture', data.moisture,    'moisture');
-    updateSensorCard('light',    data.light,       'light');
-    document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+// ===== WATERING HISTORY TABLE =====
+
+function formatTime(isoString) {
+    const d = new Date(isoString);
+    return d.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+function updateWateringTable(data) {
+    const tbody = document.getElementById('watering-table');
+    if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td class="watering-empty" colspan="4">No watering events in the last 24 hours</td></tr>';
+        return;
+    }
+    tbody.innerHTML = data.slice(0, 10).map(w => `
+        <tr>
+            <td>${formatTime(w.timestamp)}</td>
+            <td>${parseFloat(w.duration_seconds).toFixed(1)}s</td>
+            <td>${w.model_confidence ? parseFloat(w.model_confidence).toFixed(0) + ' ml' : '--'}</td>
+            <td><span class="trigger-badge trigger-${w.trigger}">${w.trigger}</span></td>
+        </tr>
+    `).join('');
 }
 
 
@@ -377,18 +366,4 @@ async function fetchWeather() {
         document.getElementById('weather-error').style.display = 'block';
         console.error('Weather API error:', err);
     }
-}
-
-
-// ===== HISTORICAL DATA =====
-
-function generateHistoricalData() {
-    const labels = [], tempData = [], moistureData = [], lightData = [];
-    for (let i = 23; i >= 0; i--) {
-        labels.push(`${i}h ago`);
-        tempData.push(Math.random() * 125);
-        moistureData.push(Math.random() * 951);
-        lightData.push(Math.random() * 1200);
-    }
-    return { labels, tempData, moistureData, lightData };
 }

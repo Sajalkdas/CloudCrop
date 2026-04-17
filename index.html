@@ -1,28 +1,9 @@
 <!-- * CloudCrop - Main Dashboard (index.html)
  *
- * This file represents the main user dashboard of the CloudCrop system.
- * It displays real-time environmental sensor data including temperature,
- * soil moisture, and sunlight levels, along with weather updates and
- * historical analytics charts.
- *
- * Features:
- * - Protected dashboard (requires Firebase authentication)
- * - Real-time sensor data display (temperature, moisture, light)
- * - Weather API integration (OpenWeatherMap)
- * - Historical data visualization using Chart.js
- * - Responsive navigation bar with mobile support
- * - User session handling and logout functionality
- * - Auth overlay control (login/register/forgot password panels)
- *
- * Dependencies:
- * - Firebase Authentication (v9+ compat)
- * - Chart.js
- * - Font Awesome
- *
  * Author: Sajal Das
- * Modified: 4/11/2026
+ * Modified: 4/16/2026
  -->
- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +12,6 @@
     <title>CloudCrop</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
 
@@ -55,7 +35,7 @@
                 <div class="auth-field">
                     <label>Password</label>
                     <div class="password-wrapper">
-                        <input type="password" id="login-password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="current-password">
+                        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
                         <button type="button" class="eye-toggle" onclick="togglePassword('login-password', this)" aria-label="Toggle password visibility">
                             <svg class="eye-icon eye-show" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             <svg class="eye-icon eye-hide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
@@ -91,7 +71,7 @@
                 <div class="auth-field">
                     <label>Confirm Password</label>
                     <div class="password-wrapper">
-                        <input type="password" id="register-confirm" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="new-password">
+                        <input type="password" id="register-confirm" placeholder="••••••••" autocomplete="new-password">
                         <button type="button" class="eye-toggle" onclick="togglePassword('register-confirm', this)" aria-label="Toggle password visibility">
                             <svg class="eye-icon eye-show" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             <svg class="eye-icon eye-hide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
@@ -107,6 +87,7 @@
             <!-- Forgot Password Panel -->
             <div id="panel-forgot" class="auth-panel">
                 <h2 class="auth-title">Reset Password</h2>
+                <p class="auth-subtitle">We'll send you a reset link</p>
                 <div id="forgot-error" class="auth-error" style="display:none;"></div>
                 <div id="forgot-success" class="auth-success" style="display:none;"></div>
                 <div class="auth-field">
@@ -153,6 +134,7 @@
             <p class="last-update">Last updated: <span id="timestamp">--</span></p>
         </header>
 
+        <!-- Sensor Cards -->
         <div class="dashboard" id="dashboard">
             <div class="sensor-card">
                 <div class="sensor-header">
@@ -191,6 +173,7 @@
             </div>
         </div>
 
+        <!-- Weather -->
         <div class="weather-container">
             <div class="chart-title">🌤️ Current Weather &amp; 2-Hour Forecast</div>
             <div id="weather-error" class="weather-error" style="display:none;">Unable to load weather data.</div>
@@ -214,9 +197,24 @@
             </div>
         </div>
 
+        <!-- ===== WATERING HISTORY (replaces chart) ===== -->
         <div class="chart-container">
-            <div class="chart-title">📊 Historical Data (Last 24 Hours)</div>
-            <canvas id="dataChart"></canvas>
+            <div class="chart-title">💧 Watering History (Last 24 Hours)</div>
+            <div class="watering-table-wrap">
+                <table class="watering-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Duration</th>
+                            <th>Water</th>
+                            <th>Trigger</th>
+                        </tr>
+                    </thead>
+                    <tbody id="watering-table">
+                        <tr><td class="watering-empty" colspan="4">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

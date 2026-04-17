@@ -327,6 +327,68 @@ canvas {
 }
 
 
+/* ===== WATERING HISTORY TABLE ===== */
+
+.watering-table-wrap {
+    overflow-x: auto;
+}
+
+.watering-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.watering-table thead th {
+    text-align: left;
+    color: #64748b;
+    font-weight: 600;
+    padding: 10px 14px;
+    border-bottom: 2px solid #e2e8f0;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.watering-table tbody tr {
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.15s;
+}
+
+.watering-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.watering-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.watering-table tbody td {
+    padding: 12px 14px;
+    color: #374151;
+}
+
+.watering-empty {
+    color: #94a3b8;
+    font-size: 0.875rem;
+    padding: 20px 14px !important;
+    text-align: center;
+}
+
+.trigger-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.trigger-auto   { background: #dcfce7; color: #166534; }
+.trigger-manual { background: #dbeafe; color: #1e40af; }
+
+
 /* ===== SENSOR VALUE ACCENT COLORS ===== */
 
 .temp     { color: #ff6b6b; }
